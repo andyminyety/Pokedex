@@ -2,7 +2,7 @@
 
 A simple Pokemon app written primarily in Vanila JavaScript. It uses the API from: **[PokéAPI](https://pokeapi.co).**  
 
-The app displays a list of the first 999 Pokemon in the database. The user can search Pokemon by name and click on each Pokemon to open a modal that displays more information.
+The app displays a list of the first 999 pokemon registered in the API. The user can search Pokemon by name and click on each Pokemon to open a modal that displays more information.
 
 ### Demo :computer:
 
