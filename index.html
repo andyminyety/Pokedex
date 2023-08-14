@@ -12,11 +12,50 @@
     <div class="pokedex-container m-4">
         <img class="pokedex-image" src="img/pokedex.png" alt="Pokédex">
     </div>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12 mb-4">
+                <label class="input-group-text" for="filterInput">Filter by name or id:
+                    <input type="text" class="form-control text-uppercase" id="filterInput" oninput="filterByPokemon()">
+                </label>
+            </div>
+            <div class="col-md-12 mb-4">
+                <label class="input-group-text d-flex align-items-center type-filter" for="typeFilter" id="typeFilter">Filter by type:
+                    <span type="button" class="filter-badge badge all ms-2" data-type="all" onclick="filterByType('all')">All</span>
+                    <span type="button" class="filter-badge badge normal ms-2" data-type="normal" onclick="filterByType('normal')">Normal</span>
+                    <span type="button" class="filter-badge badge fighting ms-2" data-type="fighting" onclick="filterByType('fighting')">Fighting</span>
+                    <span type="button" class="filter-badge badge flying ms-2" data-type="flying" onclick="filterByType('flying')">Flying</span>
+                    <span type="button" class="filter-badge badge poison ms-2" data-type="poison" onclick="filterByType('poison')">Poison</span>
+                    <span type="button" class="filter-badge badge ground ms-2" data-type="ground" onclick="filterByType('ground')">Ground</span>
+                    <span type="button" class="filter-badge badge rock ms-2" data-type="rock" onclick="filterByType('rock')">Rock</span>
+                    <span type="button" class="filter-badge badge bug ms-2" data-type="bug" onclick="filterByType('bug')">Bug</span>
+                    <span type="button" class="filter-badge badge ghost ms-2" data-type="ghost" onclick="filterByType('ghost')">Ghost</span>
+                    <span type="button" class="filter-badge badge steel ms-2" data-type="steel" onclick="filterByType('steel')">Steel</span>
+                    <span type="button" class="filter-badge badge fire ms-2" data-type="fire" onclick="filterByType('fire')">Fire</span>
+                    <span type="button" class="filter-badge badge water ms-2" data-type="water" onclick="filterByType('water')">Water</span>
+                    <span type="button" class="filter-badge badge grass ms-2" data-type="grass" onclick="filterByType('grass')">Grass</span>
+                    <span type="button" class="filter-badge badge electric ms-2" data-type="electric" onclick="filterByType('electric')">Electric</span>
+                    <span type="button" class="filter-badge badge psychic ms-2" data-type="psychic" onclick="filterByType('psychic')">Psychic</span>
+                    <span type="button" class="filter-badge badge ice ms-2" data-type="ice" onclick="filterByType('ice')">Ice</span>
+                    <span type="button" class="filter-badge badge dragon ms-2" data-type="dragon" onclick="filterByType('dragon')">Dragon</span>
+                    <span type="button" class="filter-badge badge dark ms-2" data-type="dark" onclick="filterByType('dark')">Dark</span>
+                    <span type="button" class="filter-badge badge fairy ms-2" data-type="fairy" onclick="filterByType('fairy')">Fairy</span>
+                </label>
+            </div>
+        </div>
+    </div>
     <div class="container mt-2">
         <div class="row" id="listPokemon">
-            <!-- Pokémon elements will be added here using JavaScript -->
+            <!-- Pokemon elements will be added here -->
         </div>
-    </div>    
+    </div>
+    <div class="container" id="messageId">
+        <!-- Pokemon alert will be added here -->
+    </div>
+    <div class="container mb-4">
+        <button class="btn-pages badge" id="previousPage" onclick="goToPreviousPage()">Previous</button>
+        <button class="btn-pages badge" id="nextPage" onclick="goToNextPage()">Next</button>
+    </div>  
     <script src="js/script.js"></script>
 </body>
 </html>

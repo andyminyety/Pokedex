@@ -14,6 +14,17 @@ body {
     text-align: center;
 }
 
+.type-filter {
+    max-width: 100%;
+    overflow-x: auto;
+    white-space: nowrap;
+}
+
+.filter-badge {
+    font-size: 0.9rem;
+    display: inline-block;
+}
+
 .pokedex-image {
     max-width: 100%;
     height: auto;
@@ -31,7 +42,7 @@ body {
 }
 
 .pokemon-id {
-    background-color: #ECECEC;
+    background-color: #DCDCDC;
     color: #1C1C1C;
     border: solid 1px;
     font-size: 1rem;
@@ -50,6 +61,12 @@ body {
     font-weight: bold;
     justify-content: center;
     margin: 0;
+}
+
+.all {
+    background-color: #DCDCDC;
+    color: #1C1C1C;
+    border: solid 1px #1C1C1C;
 }
 
 .normal {
@@ -158,4 +175,17 @@ body {
     background-color: #F0B6BC;
     color: #F7F7F7;
     border: solid 1px #1C1C1C;
+}
+
+.btn-pages {
+    font-size: 1.3rem;
+    background-color: #F7F7F7;
+    color: #1C1C1C;
+    border: solid 1px #1C1C1C;
+}
+
+.btn-pages:hover {
+    color: #1C1C1C;
+    border: solid 1px #1C1C1C;
+    background: #DCDCDC;
 }
