@@ -12,7 +12,7 @@ const typeFilter = document.getElementById('typeFilter');
 const messageResult = document.getElementById('messageId');
 const previousPageButton = document.getElementById('previousPage');
 const nextPageButton = document.getElementById('nextPage');
-const modalBody = document.querySelector('#pokemonModal .modal-body');
+const modalBody = document.getElementById('modalBody');
 
 async function getAllPokemon() {
     const response = await fetch(`${API_BASE_URL}pokemon`);
@@ -70,7 +70,7 @@ function createPokemonCard(pokemon) {
 
 function openPokemonModal(pokemon) {
     const types = pokemon.types.map(type => `<span class="badge ${type.type.name}">${type.type.name}</span>`).join('');
-
+    
     modalBody.innerHTML = `
         <div class="row">
             <div class="col-md-5">
@@ -132,10 +132,19 @@ function openPokemonModal(pokemon) {
                             <td><i class="fa-regular fa-chess-pawn fa-xl"></i></i></td>
                         </tr>
                         <tr>
+                            <td class="td-bottom ">Speed</td>
+                            <td class="td-bottom">
+                                <div class="progress" style="height: 20px;">
+                                    <div class="progress-bar progress-bar-striped progress-bar-animated fire progress-bar-label" role="progressbar" style="width: ${pokemon.stats.find(stat => stat.stat.name === 'speed').base_stat}%;" aria-valuenow="${pokemon.stats.find(stat => stat.stat.name === 'speed').base_stat}" aria-valuemin="0" aria-valuemax="100">${pokemon.stats.find(stat => stat.stat.name === 'speed').base_stat}</div>
+                                </div>
+                            </td>
+                            <td><i cl<i class="fa-regular fa-hourglass fa-xl"></i></i></td>
+                        </tr>
+                        <tr>
                             <td class="td-bottom ">Sp. Attack</td>
                             <td class="td-bottom">
                                 <div class="progress" style="height: 20px;">
-                                    <div class="progress-bar progress-bar-striped progress-bar-animated fire progress-bar-label" role="progressbar" style="width: ${pokemon.stats.find(stat => stat.stat.name === 'special-attack').base_stat}%;" aria-valuenow="${pokemon.stats.find(stat => stat.stat.name === 'special-attack').base_stat}" aria-valuemin="0" aria-valuemax="100">${pokemon.stats.find(stat => stat.stat.name === 'special-attack').base_stat}</div>
+                                    <div class="progress-bar progress-bar-striped progress-bar-animated psychic progress-bar-label" role="progressbar" style="width: ${pokemon.stats.find(stat => stat.stat.name === 'special-attack').base_stat}%;" aria-valuenow="${pokemon.stats.find(stat => stat.stat.name === 'special-attack').base_stat}" aria-valuemin="0" aria-valuemax="100">${pokemon.stats.find(stat => stat.stat.name === 'special-attack').base_stat}</div>
                                 </div>
                             </td>
                             <td><i class="fa-regular fa-star fa-xl"></i></i></td>
@@ -148,15 +157,6 @@ function openPokemonModal(pokemon) {
                                 </div>
                             </td>
                             <td><i class="fa-regular fa-gem fa-xl"></i></td>
-                        </tr>
-                        <tr>
-                            <td class="td-bottom ">Speed</td>
-                            <td class="td-bottom">
-                                <div class="progress" style="height: 20px;">
-                                    <div class="progress-bar progress-bar-striped progress-bar-animated dark progress-bar-label" role="progressbar" style="width: ${pokemon.stats.find(stat => stat.stat.name === 'speed').base_stat}%;" aria-valuenow="${pokemon.stats.find(stat => stat.stat.name === 'speed').base_stat}" aria-valuemin="0" aria-valuemax="100">${pokemon.stats.find(stat => stat.stat.name === 'speed').base_stat}</div>
-                                </div>
-                            </td>
-                            <td><i cl<i class="fa-regular fa-hourglass fa-xl"></i></i></td>
                         </tr>
                     </tbody>
                 </table>
