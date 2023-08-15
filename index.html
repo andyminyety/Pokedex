@@ -18,11 +18,11 @@
         <div class="row">
             <div class="col-md-12 mb-4">
                 <label class="input-group-text pokemon-form" for="filterInput">Filter by name or id:
-                    <input type="text" class="form-control text-uppercase ms-2" id="filterInput" placeholder="Pikachu" oninput="filterByPokemon()">
+                    <input type="text" class="form-control text-uppercase ms-2" id="filterInput" oninput="filterByPokemon()">
                 </label>
             </div>
             <div class="col-md-12 mb-4">
-                <label class="input-group-text d-flex align-items-center pokemon-form type-filter" for="typeFilter" id="typeFilter">Filter by type:
+                <label class="input-group-text pokemon-form" for="typeFilter" id="typeFilter">Filter by type:
                     <span type="button" class="filter-badge badge all ms-2" data-type="all" onclick="filterByType('all')">All</span>
                     <span type="button" class="filter-badge badge normal ms-2" data-type="normal" onclick="filterByType('normal')">Normal</span>
                     <span type="button" class="filter-badge badge fighting ms-2" data-type="fighting" onclick="filterByType('fighting')">Fighting</span>

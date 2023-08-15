@@ -15,14 +15,11 @@ body {
 }
 
 .pokemon-form {
-    border: solid 1.6px #1C1C1C;
-    border-radius: .7rem;
-}
-
-.type-filter {
     max-width: 100%;
     overflow-x: auto;
     white-space: nowrap;
+    border: solid 1.6px #1C1C1C;
+    border-radius: .7rem;
 }
 
 .filter-badge {
@@ -204,6 +201,11 @@ body {
     border: 0;
 }
 
+.modal-body {
+    max-height: 70vh;
+    overflow-y: auto;
+}
+
 .space-bottom {
     margin: 0px 0px 10px;
 }
@@ -217,8 +219,12 @@ body {
     padding: 10px;
 }
 
+.stat-base {
+    width: 33%;
+}
+
 .stat-name {
-    width: 35%;
+    width: 40%;
 }
 
 .stat-progress {

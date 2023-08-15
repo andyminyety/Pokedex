@@ -81,9 +81,9 @@ function openPokemonModal(pokemon) {
                 <table class="stats-table mt-3">
                     <thead>
                         <tr>
-                            <th class="stat-name"><i class="fa-regular fa-life-ring"></i></strong> ${pokemon.weight} Kg</th>
-                            <th class="stat-progress"><i class="fa-regular fa-chart-bar"></i></strong> ${pokemon.height} M</th>
-                            <th class="stat-evolution"><i class="fas fa-chart-line"></i></strong> ${pokemon.base_experience} Exp</th>
+                            <th class="stat-base"><i class="fa-regular fa-life-ring"></i></strong> ${pokemon.weight} Kg</th>
+                            <th class="stat-base"><i class="fa-regular fa-chart-bar"></i></strong> ${pokemon.height} M</th>
+                            <th class="stat-base"><i class="fas fa-chart-line"></i></strong> ${pokemon.base_experience} Exp</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -96,67 +96,82 @@ function openPokemonModal(pokemon) {
                 </table>
             </div>
             <div class="col-md-7">
-                <table class="stats-table mt-4">
+                <table class="stats-table mt-2">
                     <thead>
                         <tr>
-                            <th class="td-bottom stat-name">Stats</th>
-                            <th class="td-bottom stat-progress">Value</th>
+                            <th class="td-bottom" colspan="3">Stats</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr>
-                            <td class="td-bottom">HP</td>
-                            <td class="td-bottom">
+                            <td class="td-bottom stat-name">HP</td>
+                            <td class="td-bottom stat-progress">
                                 <div class="progress" style="height: 20px;">
                                     <div class="progress-bar progress-bar-striped progress-bar-animated grass progress-bar-label" role="progressbar" style="width: ${pokemon.stats.find(stat => stat.stat.name === 'hp').base_stat}%;" aria-valuenow="${pokemon.stats.find(stat => stat.stat.name === 'hp').base_stat}" aria-valuemin="0" aria-valuemax="100">${pokemon.stats.find(stat => stat.stat.name === 'hp').base_stat}</div>
                                 </div>
                             </td>
-                            <td><i class="fa-regular fa-heart fa-xl"></i></td>
+                            <td class="td-bottom"><i class="fa-regular fa-heart fa-xl"></i></td>
                         </tr>
                         <tr>
-                            <td class="td-bottom ">Attack</td>
-                            <td class="td-bottom">
+                            <td class="td-bottom stat-name">Attack</td>
+                            <td class="td-bottom stat-progress">
                                 <div class="progress" style="height: 20px;">
                                     <div class="progress-bar progress-bar-striped progress-bar-animated fighting progress-bar-label" role="progressbar" style="width: ${pokemon.stats.find(stat => stat.stat.name === 'attack').base_stat}%;" aria-valuenow="${pokemon.stats.find(stat => stat.stat.name === 'attack').base_stat}" aria-valuemin="0" aria-valuemax="100">${pokemon.stats.find(stat => stat.stat.name === 'attack').base_stat}</div>
                                 </div>
                             </td>
-                            <td><i class="fa-regular fa-sun fa-xl"></i></i></td>
+                            <td class="td-bottom stat-progress"><i class="fa-regular fa-sun fa-xl"></i></i></td>
                         </tr>
                         <tr>
-                            <td class="td-bottom ">Defense</td>
-                            <td class="td-bottom">
+                            <td class="td-bottom stat-name">Defense</td>
+                            <td class="td-bottom stat-progress">
                                 <div class="progress" style="height: 20px;">
                                     <div class="progress-bar progress-bar-striped progress-bar-animated electric progress-bar-label" role="progressbar" style="width: ${pokemon.stats.find(stat => stat.stat.name === 'defense').base_stat}%;" aria-valuenow="${pokemon.stats.find(stat => stat.stat.name === 'defense').base_stat}" aria-valuemin="0" aria-valuemax="100">${pokemon.stats.find(stat => stat.stat.name === 'defense').base_stat}</div>
                                 </div>
                             </td>
-                            <td><i class="fa-regular fa-chess-pawn fa-xl"></i></i></td>
+                            <td class="td-bottom"><i class="fa-regular fa-chess-pawn fa-xl"></i></i></td>
                         </tr>
                         <tr>
-                            <td class="td-bottom ">Speed</td>
-                            <td class="td-bottom">
+                            <td class="td-bottom stat-name">Speed</td>
+                            <td class="td-bottom stat-progress">
                                 <div class="progress" style="height: 20px;">
                                     <div class="progress-bar progress-bar-striped progress-bar-animated fire progress-bar-label" role="progressbar" style="width: ${pokemon.stats.find(stat => stat.stat.name === 'speed').base_stat}%;" aria-valuenow="${pokemon.stats.find(stat => stat.stat.name === 'speed').base_stat}" aria-valuemin="0" aria-valuemax="100">${pokemon.stats.find(stat => stat.stat.name === 'speed').base_stat}</div>
                                 </div>
                             </td>
-                            <td><i cl<i class="fa-regular fa-hourglass fa-xl"></i></i></td>
+                            <td class="td-bottom"><i cl<i class="fa-regular fa-hourglass fa-xl"></i></i></td>
                         </tr>
                         <tr>
-                            <td class="td-bottom ">Sp. Attack</td>
-                            <td class="td-bottom">
+                            <td class="td-bottom stat-name">Sp. Attack</td>
+                            <td class="td-bottom stat-progress">
                                 <div class="progress" style="height: 20px;">
                                     <div class="progress-bar progress-bar-striped progress-bar-animated psychic progress-bar-label" role="progressbar" style="width: ${pokemon.stats.find(stat => stat.stat.name === 'special-attack').base_stat}%;" aria-valuenow="${pokemon.stats.find(stat => stat.stat.name === 'special-attack').base_stat}" aria-valuemin="0" aria-valuemax="100">${pokemon.stats.find(stat => stat.stat.name === 'special-attack').base_stat}</div>
                                 </div>
                             </td>
-                            <td><i class="fa-regular fa-star fa-xl"></i></i></td>
+                            <td class="td-bottom"><i class="fa-regular fa-star fa-xl"></i></i></td>
                         </tr>
                         <tr>
-                            <td class="td-bottom ">Sp. Defense</td>
-                            <td class="td-bottom">
+                            <td class="td-bottom stat-name">Sp. Defense</td>
+                            <td class="td-bottom stat-progress">
                                 <div class="progress" style="height: 20px;">
                                     <div class="progress-bar progress-bar-striped progress-bar-animated ghost progress-bar-label" role="progressbar" style="width: ${pokemon.stats.find(stat => stat.stat.name === 'special-defense').base_stat}%;" aria-valuenow="${pokemon.stats.find(stat => stat.stat.name === 'special-defense').base_stat}" aria-valuemin="0" aria-valuemax="100">${pokemon.stats.find(stat => stat.stat.name === 'special-defense').base_stat}</div>
                                 </div>
                             </td>
-                            <td><i class="fa-regular fa-gem fa-xl"></i></td>
+                            <td class="td-bottom"><i class="fa-regular fa-gem fa-xl"></i></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="col-md-12">
+                <table class="stats-table mt-2">
+                    <thead>
+                        <tr>
+                            <th class="td-bottom" colspan="3">Evolutions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="td-bottom">Pokemon here</td>
+                            <td class="td-bottom">Pokemon here</td>
+                            <td class="td-bottom">Pokemon here</td>
                         </tr>
                     </tbody>
                 </table>
