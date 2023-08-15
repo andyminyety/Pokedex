@@ -14,6 +14,11 @@ body {
     text-align: center;
 }
 
+.pokemon-form {
+    border: solid 1.6px #1C1C1C;
+    border-radius: .7rem;
+}
+
 .type-filter {
     max-width: 100%;
     overflow-x: auto;
@@ -31,7 +36,9 @@ body {
 }
 
 .pokemon-card {
-    border: solid 1px #1C1C1C;
+    cursor: pointer;
+    border: solid 1.6px #1C1C1C;
+    border-radius: .7rem;
 }
 
 .pokemon-image {
@@ -44,7 +51,7 @@ body {
 .pokemon-id {
     background-color: #DCDCDC;
     color: #1C1C1C;
-    border: solid 1px;
+    border: solid 1.6px;
     font-size: 1rem;
     margin: 0px 0px 10px;
 }
@@ -66,126 +73,179 @@ body {
 .all {
     background-color: #DCDCDC;
     color: #1C1C1C;
-    border: solid 1px #1C1C1C;
+    border: solid 1.6px #1C1C1C;
 }
 
 .normal {
     background-color: #A8A878;
     color: #F7F7F7;
-    border: solid 1px #1C1C1C;
+    border: solid 1.6px #1C1C1C;
 }
 
 .fire {
     background-color: #F08030;
     color: #F7F7F7;
-    border: solid 1px #1C1C1C;
+    border: solid 1.6px #1C1C1C;
 }
 
 .water {
     background-color: #6890F0;
     color: #F7F7F7;
-    border: solid 1px #1C1C1C;
+    border: solid 1.6px #1C1C1C;
 }
 
 .grass {
     background-color: #78C850;
     color: #F7F7F7;
-    border: solid 1px #1C1C1C;
+    border: solid 1.6px #1C1C1C;
 }
 
 .electric {
     background-color: #F8D030;
     color: #F7F7F7;
-    border: solid 1px #1C1C1C;
+    border: solid 1.6px #1C1C1C;
 }
 
 .ice {
     background-color: #98D8D8;
     color: #F7F7F7;
-    border: solid 1px #1C1C1C;
+    border: solid 1.6px #1C1C1C;
 }
 
 .fighting {
     background-color: #C03028;
     color: #F7F7F7; 
-    border: solid 1px #1C1C1C;
+    border: solid 1.6px #1C1C1C;
 }
 
 .poison {
     background-color: #A040A0;
     color: #F7F7F7;
-    border: solid 1px #1C1C1C;
+    border: solid 1.6px #1C1C1C;
 }
 
 .ground {
     background-color: #E0C068;
     color: #F7F7F7;
-    border: solid 1px #1C1C1C;
+    border: solid 1.6px #1C1C1C;
 }
 
 .flying {
     background-color: #A890F0;
     color: #F7F7F7;
-    border: solid 1px #1C1C1C;
+    border: solid 1.6px #1C1C1C;
 }
 
 .psychic {
     background-color: #F85888;
     color: #F7F7F7;
-    border: solid 1px #1C1C1C;
+    border: solid 1.6px #1C1C1C;
 }
 
 .bug {
     background-color: #A8B820;
     color: #F7F7F7;
-    border: solid 1px #1C1C1C;
+    border: solid 1.6px #1C1C1C;
 }
 
 .rock {
     background-color: #B8A038;
     color: #F7F7F7;
-    border: solid 1px #1C1C1C;
+    border: solid 1.6px #1C1C1C;
 }
 
 .ghost {
     background-color: #705898;
     color: #F7F7F7;
-    border: solid 1px #1C1C1C;
+    border: solid 1.6px #1C1C1C;
 }
 
 .dark {
     background-color: #705848;
     color: #F7F7F7;
-    border: solid 1px #1C1C1C;
+    border: solid 1.6px #1C1C1C;
 }
 
 .dragon {
     background-color: #7038F8;
     color: #F7F7F7; 
-    border: solid 1px #1C1C1C;
+    border: solid 1.6px #1C1C1C;
 }
 
 .steel {
     background-color: #B8B8D0;
     color: #F7F7F7;
-    border: solid 1px #1C1C1C;
+    border: solid 1.6px #1C1C1C;
 }
 
 .fairy {
     background-color: #F0B6BC;
     color: #F7F7F7;
-    border: solid 1px #1C1C1C;
+    border: solid 1.6px #1C1C1C;
 }
 
 .btn-pages {
     font-size: 1.3rem;
     background-color: #F7F7F7;
     color: #1C1C1C;
-    border: solid 1px #1C1C1C;
+    border: solid 1.6px #1C1C1C;
 }
 
-.btn-pages:hover {
-    color: #1C1C1C;
-    border: solid 1px #1C1C1C;
-    background: #DCDCDC;
+.form-control {
+    background-color: #F8F9FA;
+    border: none;
+}
+
+.modal-container {
+    padding: 0 1rem 1rem;
+}
+
+.no-border-modal {
+    border: 0;
+}
+
+.space-bottom {
+    margin: 0px 0px 10px;
+}
+
+.stats-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.stats-table .td-bottom {
+    padding: 10px;
+}
+
+.stat-name {
+    width: 35%;
+}
+
+.stat-progress {
+    width: 50%;
+}
+
+.progress-bar-label {
+    font-weight: bold;
+    font-size: 1rem;
+    color: #F7F7F7;
+}
+
+.modal-background {
+    background: linear-gradient(0deg, #282C34 0%, #11002080 100%);
+}
+
+.form-control:focus, .btn-close:focus {
+    box-shadow: none;
+    border: none;
+}
+
+.pokemon-card:hover, .btn-pages:hover{
+    color: #F7F7F7;
+    border: solid 1.6px #5A6985;
+    background: linear-gradient(0deg, #282C34 0%, #11002080 100%);
+}
+
+.pokemon-card:hover .badge {
+    border: solid 1.6px #F7F7F7;
 }
