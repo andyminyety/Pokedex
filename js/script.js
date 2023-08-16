@@ -20,10 +20,41 @@ async function getAllPokemon() {
     return data.count;
 }
 
-async function getPokemon(pokemonId) {
+async function getPokemonById(pokemonId) {
     const response = await fetch(`${API_BASE_URL}pokemon/${pokemonId}`);
     return response.json();
 }
+
+async function getEvolutions(pokemonSpeciesUrl) {
+    try {
+      const speciesResponse = await fetch(pokemonSpeciesUrl);
+      const speciesData = await speciesResponse.json();
+      
+      const evolutionChainUrl = speciesData.evolution_chain.url;
+      const evolutionChainResponse = await fetch(evolutionChainUrl);
+      const evolutionChainData = await evolutionChainResponse.json();
+  
+      const evolutions = [];
+  
+      const processEvolutions = (evolutionDetails) => {
+        evolutions.push({
+          id: evolutionDetails.species.url.split('/').slice(-2, -1)[0],
+          name: evolutionDetails.species.name,
+          image: `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${evolutionDetails.species.url.split('/').slice(-2, -1)[0]}.png`
+        });
+        if (evolutionDetails.evolves_to.length > 0) {
+          evolutionDetails.evolves_to.forEach(evolution => {
+            processEvolutions(evolution);
+          });
+        }
+      };
+  
+      processEvolutions(evolutionChainData.chain);
+      return evolutions;
+    } catch (error) {
+      throw new Error('Error fetching evolutions: ' + error.message);
+    }
+} 
 
 async function getPokemonForPage(page) {
     listPokemon.innerHTML = '';
@@ -37,12 +68,12 @@ async function getPokemonForPage(page) {
             createPokemonCard(pokemonData);
         } else {
             const pokemonId = i + 1;
-            const pokemonData = await getPokemon(pokemonId);
+            const pokemonData = await getPokemonById(pokemonId);
             ALL_POKEMON_DATA.push(pokemonData);
             createPokemonCard(pokemonData);
         }
     }
-}
+} 
 
 function createPokemonCard(pokemon) {
     const types = pokemon.types.map(type => `<span class="badge ${type.type.name}">${type.type.name}</span>`).join('');
@@ -62,125 +93,139 @@ function createPokemonCard(pokemon) {
   `;
 
     card.addEventListener('click', () => {
-        openPokemonModal(pokemon);
+        openPokemonDetails(pokemon);
     });
 
     listPokemon.appendChild(card);
 }
 
-function openPokemonModal(pokemon) {
+async function openPokemonDetails(pokemon) {
     const types = pokemon.types.map(type => `<span class="badge ${type.type.name}">${type.type.name}</span>`).join('');
-    
-    modalBody.innerHTML = `
-        <div class="row">
-            <div class="col-md-5">
-                <img src="${pokemon.sprites.other['official-artwork'].front_default}" alt="${pokemon.name}" class="pokemon-image">
-                <p class="badge pokemon-id">#${pokemon.id}</p>
-                <h3 class="pokemon-name">${pokemon.name}</h3>
-                <p class="pokemon-types space-bottom">${types}</p>
-                <table class="stats-table mt-3">
-                    <thead>
-                        <tr>
-                            <th class="stat-base"><i class="fa-regular fa-life-ring"></i></strong> ${pokemon.weight} Kg</th>
-                            <th class="stat-base"><i class="fa-regular fa-chart-bar"></i></strong> ${pokemon.height} M</th>
-                            <th class="stat-base"><i class="fas fa-chart-line"></i></strong> ${pokemon.base_experience} Exp</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>Weight</td>
-                            <td>Height</td>
-                            <td>Experience</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-            <div class="col-md-7">
-                <table class="stats-table mt-2">
-                    <thead>
-                        <tr>
-                            <th class="td-bottom" colspan="3">Stats</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td class="td-bottom stat-name">HP</td>
-                            <td class="td-bottom stat-progress">
-                                <div class="progress" style="height: 20px;">
-                                    <div class="progress-bar progress-bar-striped progress-bar-animated grass progress-bar-label" role="progressbar" style="width: ${pokemon.stats.find(stat => stat.stat.name === 'hp').base_stat}%;" aria-valuenow="${pokemon.stats.find(stat => stat.stat.name === 'hp').base_stat}" aria-valuemin="0" aria-valuemax="100">${pokemon.stats.find(stat => stat.stat.name === 'hp').base_stat}</div>
-                                </div>
-                            </td>
-                            <td class="td-bottom"><i class="fa-regular fa-heart fa-xl"></i></td>
-                        </tr>
-                        <tr>
-                            <td class="td-bottom stat-name">Attack</td>
-                            <td class="td-bottom stat-progress">
-                                <div class="progress" style="height: 20px;">
-                                    <div class="progress-bar progress-bar-striped progress-bar-animated fighting progress-bar-label" role="progressbar" style="width: ${pokemon.stats.find(stat => stat.stat.name === 'attack').base_stat}%;" aria-valuenow="${pokemon.stats.find(stat => stat.stat.name === 'attack').base_stat}" aria-valuemin="0" aria-valuemax="100">${pokemon.stats.find(stat => stat.stat.name === 'attack').base_stat}</div>
-                                </div>
-                            </td>
-                            <td class="td-bottom stat-progress"><i class="fa-regular fa-sun fa-xl"></i></i></td>
-                        </tr>
-                        <tr>
-                            <td class="td-bottom stat-name">Defense</td>
-                            <td class="td-bottom stat-progress">
-                                <div class="progress" style="height: 20px;">
-                                    <div class="progress-bar progress-bar-striped progress-bar-animated electric progress-bar-label" role="progressbar" style="width: ${pokemon.stats.find(stat => stat.stat.name === 'defense').base_stat}%;" aria-valuenow="${pokemon.stats.find(stat => stat.stat.name === 'defense').base_stat}" aria-valuemin="0" aria-valuemax="100">${pokemon.stats.find(stat => stat.stat.name === 'defense').base_stat}</div>
-                                </div>
-                            </td>
-                            <td class="td-bottom"><i class="fa-regular fa-chess-pawn fa-xl"></i></i></td>
-                        </tr>
-                        <tr>
-                            <td class="td-bottom stat-name">Speed</td>
-                            <td class="td-bottom stat-progress">
-                                <div class="progress" style="height: 20px;">
-                                    <div class="progress-bar progress-bar-striped progress-bar-animated fire progress-bar-label" role="progressbar" style="width: ${pokemon.stats.find(stat => stat.stat.name === 'speed').base_stat}%;" aria-valuenow="${pokemon.stats.find(stat => stat.stat.name === 'speed').base_stat}" aria-valuemin="0" aria-valuemax="100">${pokemon.stats.find(stat => stat.stat.name === 'speed').base_stat}</div>
-                                </div>
-                            </td>
-                            <td class="td-bottom"><i cl<i class="fa-regular fa-hourglass fa-xl"></i></i></td>
-                        </tr>
-                        <tr>
-                            <td class="td-bottom stat-name">Sp. Attack</td>
-                            <td class="td-bottom stat-progress">
-                                <div class="progress" style="height: 20px;">
-                                    <div class="progress-bar progress-bar-striped progress-bar-animated psychic progress-bar-label" role="progressbar" style="width: ${pokemon.stats.find(stat => stat.stat.name === 'special-attack').base_stat}%;" aria-valuenow="${pokemon.stats.find(stat => stat.stat.name === 'special-attack').base_stat}" aria-valuemin="0" aria-valuemax="100">${pokemon.stats.find(stat => stat.stat.name === 'special-attack').base_stat}</div>
-                                </div>
-                            </td>
-                            <td class="td-bottom"><i class="fa-regular fa-star fa-xl"></i></i></td>
-                        </tr>
-                        <tr>
-                            <td class="td-bottom stat-name">Sp. Defense</td>
-                            <td class="td-bottom stat-progress">
-                                <div class="progress" style="height: 20px;">
-                                    <div class="progress-bar progress-bar-striped progress-bar-animated ghost progress-bar-label" role="progressbar" style="width: ${pokemon.stats.find(stat => stat.stat.name === 'special-defense').base_stat}%;" aria-valuenow="${pokemon.stats.find(stat => stat.stat.name === 'special-defense').base_stat}" aria-valuemin="0" aria-valuemax="100">${pokemon.stats.find(stat => stat.stat.name === 'special-defense').base_stat}</div>
-                                </div>
-                            </td>
-                            <td class="td-bottom"><i class="fa-regular fa-gem fa-xl"></i></td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-            <div class="col-md-12">
-                <table class="stats-table mt-2">
-                    <thead>
-                        <tr>
-                            <th class="td-bottom" colspan="3">Evolutions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td class="td-bottom">Pokemon here</td>
-                            <td class="td-bottom">Pokemon here</td>
-                            <td class="td-bottom">Pokemon here</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-    `;
+    const pokemonId = pokemon.id.toString().padStart(3, '0');
+    const totalStats = pokemon.stats.reduce((total, stat) => total + stat.base_stat, 0);
 
-    const pokemonModal = new bootstrap.Modal(document.getElementById('pokemonModal'));
-    pokemonModal.show();
+    try {
+        const evolutions = await getEvolutions(pokemon.species.url);
+        const evolutionsChunks = chunkArray(evolutions, 3);
+
+        const evolutionSections = evolutionsChunks.map(chunk => chunk.map(evolution => `
+            <div class="col-md-4 mb-4">
+                <div class="d-flex flex-column align-items-center">
+                    <img class="modal-evolutions" src="${evolution.image}" alt="${evolution.name}">
+                    <div class="card-body">
+                        <p class="badge pokemon-id">#${evolution.id.toString().padStart(3, '0')}</p>
+                        <h3 class="evolutions-name">${evolution.name}</h3>
+                    </div>
+                </div>
+            </div>
+        `).join(''));
+
+        const evolutionHtml = evolutionSections.map(section => `
+            <div class="row">${section}</div>
+        `).join('');
+
+        modalBody.innerHTML = `
+            <div class="row">
+                <div class="col-md-5">
+                    <img src="${pokemon.sprites.other['official-artwork'].front_default}" alt="${pokemon.name}" class="modal-image">
+                    <div class="card-body">
+                        <p class="badge pokemon-id">#${pokemonId}</p>
+                        <h3 class="pokemon-name">${pokemon.name}</h3>
+                        <p class="pokemon-types">${types}</p>
+                    </div>
+                    <table class="stats-table mt-3">
+                        <thead>
+                            <tr>
+                                <th class="stat-base"><i class="fa-regular fa-life-ring"></i></strong> ${pokemon.weight} Kg</th>
+                                <th class="stat-base"><i class="fa-regular fa-chart-bar"></i></strong> ${pokemon.height} M</th>
+                                <th class="stat-base"><i class="fas fa-chart-line"></i></strong> ${pokemon.base_experience} Exp</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Weight</td>
+                                <td>Height</td>
+                                <td>Experience</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="col-md-7">
+                    <h6 class="modal-title mt-3 mb-2">Base Stats</h6>
+                    <table class="stats-table">
+                        <tbody>
+                            <tr>
+                                <td class="td-bottom stat-name">HP</td>
+                                <td class="td-bottom stat-progress">
+                                    <div class="progress" style="height: 20px;">
+                                        <div class="progress-bar progress-bar-striped progress-bar-animated grass progress-bar-label" role="progressbar" style="width: ${pokemon.stats.find(stat => stat.stat.name === 'hp').base_stat}%;" aria-valuenow="${pokemon.stats.find(stat => stat.stat.name === 'hp').base_stat}" aria-valuemin="0" aria-valuemax="100">${pokemon.stats.find(stat => stat.stat.name === 'hp').base_stat}</div>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="td-bottom stat-name">Attack</td>
+                                <td class="td-bottom stat-progress">
+                                    <div class="progress" style="height: 20px;">
+                                        <div class="progress-bar progress-bar-striped progress-bar-animated fighting progress-bar-label" role="progressbar" style="width: ${pokemon.stats.find(stat => stat.stat.name === 'attack').base_stat}%;" aria-valuenow="${pokemon.stats.find(stat => stat.stat.name === 'attack').base_stat}" aria-valuemin="0" aria-valuemax="100">${pokemon.stats.find(stat => stat.stat.name === 'attack').base_stat}</div>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="td-bottom stat-name">Defense</td>
+                                <td class="td-bottom stat-progress">
+                                    <div class="progress" style="height: 20px;">
+                                        <div class="progress-bar progress-bar-striped progress-bar-animated electric progress-bar-label" role="progressbar" style="width: ${pokemon.stats.find(stat => stat.stat.name === 'defense').base_stat}%;" aria-valuenow="${pokemon.stats.find(stat => stat.stat.name === 'defense').base_stat}" aria-valuemin="0" aria-valuemax="100">${pokemon.stats.find(stat => stat.stat.name === 'defense').base_stat}</div>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="td-bottom stat-name">Sp. Attack</td>
+                                <td class="td-bottom stat-progress">
+                                    <div class="progress" style="height: 20px;">
+                                        <div class="progress-bar progress-bar-striped progress-bar-animated water progress-bar-label" role="progressbar" style="width: ${pokemon.stats.find(stat => stat.stat.name === 'special-attack').base_stat}%;" aria-valuenow="${pokemon.stats.find(stat => stat.stat.name === 'special-attack').base_stat}" aria-valuemin="0" aria-valuemax="100">${pokemon.stats.find(stat => stat.stat.name === 'special-attack').base_stat}</div>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="td-bottom stat-name">Sp. Defense</td>
+                                <td class="td-bottom stat-progress">
+                                    <div class="progress" style="height: 20px;">
+                                        <div class="progress-bar progress-bar-striped progress-bar-animated fire progress-bar-label" role="progressbar" style="width: ${pokemon.stats.find(stat => stat.stat.name === 'special-defense').base_stat}%;" aria-valuenow="${pokemon.stats.find(stat => stat.stat.name === 'special-defense').base_stat}" aria-valuemin="0" aria-valuemax="100">${pokemon.stats.find(stat => stat.stat.name === 'special-defense').base_stat}</div>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="td-bottom stat-name">Speed</td>
+                                <td class="td-bottom stat-progress">
+                                    <div class="progress" style="height: 20px;">
+                                        <div class="progress-bar progress-bar-striped progress-bar-animated psychic progress-bar-label" role="progressbar" style="width: ${pokemon.stats.find(stat => stat.stat.name === 'speed').base_stat}%;" aria-valuenow="${pokemon.stats.find(stat => stat.stat.name === 'speed').base_stat}" aria-valuemin="0" aria-valuemax="100">${pokemon.stats.find(stat => stat.stat.name === 'speed').base_stat}</div>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="td-bottom stat-name">Total</td>
+                                <td class="td-bottom stat-progress">
+                                    <div class="progress" style="height: 20px;">
+                                        <div class="progress-bar progress-bar-striped progress-bar-animated ghost progress-bar-label" role="progressbar" style="width: ${totalStats}%;" aria-valuenow="${totalStats}" aria-valuemin="0" aria-valuemax="100">${totalStats}</div>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="col-md-12">
+                    <h6 class="modal-title mt-3 mb-2">Evolutions</h6>
+                        ${evolutionHtml}
+                    </div>
+                </div>
+            </div>
+        `;
+
+        const pokemonModal = new bootstrap.Modal(document.getElementById('pokemonModal'));
+        pokemonModal.show();
+  } catch (error) {
+    console.error(error.message);
+  }
 }
 
 function filterByPokemon() {
@@ -193,7 +238,8 @@ function filterByPokemon() {
         const pokemonName = pokemon.name.toLowerCase();
         const pokemonId = pokemon.id.toString();
 
-        if ((pokemonName.startsWith(filterValue) || pokemonId.startsWith(filterValue)) && (typeFilterActive === 'all' || typeMatch(pokemon, typeFilterActive))) {
+        if ((pokemonName.startsWith(filterValue) || pokemonId.startsWith(filterValue)) && 
+           (typeFilterActive === 'all' || typeMatch(pokemon, typeFilterActive))) {
             createPokemonCard(pokemon);
             foundPokemon = true;
         }
@@ -217,6 +263,14 @@ function filterByType(type) {
 
 function typeMatch(pokemon, typeFilter) {
     return pokemon.types.some(type => type.type.name === typeFilter);
+}
+
+function chunkArray(array, chunkSize) {
+    const chunks = [];
+    for (let i = 0; i < array.length; i += chunkSize) {
+        chunks.push(array.slice(i, i + chunkSize));
+    }
+    return chunks;
 }
 
 async function initApp() {
