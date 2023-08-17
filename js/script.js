@@ -25,6 +25,15 @@ async function getPokemonById(pokemonId) {
     return response.json();
 }
 
+async function getAllPokemonData() {
+    const totalPokemonCount = await getAllPokemon();
+
+    for (let i = 1; i <= Math.min(totalPokemonCount, 1010); i++) {
+        const pokemonData = await getPokemonById(i);
+        ALL_POKEMON_DATA.push(pokemonData);
+    }
+}
+
 async function getEvolutions(pokemonSpeciesUrl) {
     try {
         const speciesResponse = await fetch(pokemonSpeciesUrl);
@@ -77,7 +86,22 @@ async function getPokemonForPage(page) {
             createPokemonCard(pokemonData);
         }
     }
-} 
+
+    const previousPageButton = document.getElementById('previousPage');
+    const nextPageButton = document.getElementById('nextPage');
+
+    if (currentPage === 1) {
+        previousPageButton.classList.add('d-none');
+    } else {
+        previousPageButton.classList.remove('d-none');
+    }
+
+    if (currentPage === totalPages) {
+        nextPageButton.classList.add('d-none');
+    } else {
+        nextPageButton.classList.remove('d-none');
+    }
+}
 
 function createPokemonCard(pokemon) {
     const types = pokemon.types.map(type => `<span class="badge ${type.type.name}">${type.type.name}</span>`).join('');
@@ -303,21 +327,41 @@ function goToPage(page) {
 
 function goToPreviousPage() {
     if (currentPage > 1) {
-        goToPage(currentPage - 1);
+        const loadingSpinner = document.getElementById('loadingSpinner');
+        loadingSpinner.classList.remove('d-none');
+
+        currentPage--;
+        getPokemonForPage(currentPage);
+
+        loadingSpinner.classList.add('d-none');
     }
 }
 
 function goToNextPage() {
     if (currentPage < totalPages) {
-        goToPage(currentPage + 1);
+        const loadingSpinner = document.getElementById('loadingSpinner');
+        loadingSpinner.classList.remove('d-none');
+
+        currentPage++;
+        getPokemonForPage(currentPage);
+
+        loadingSpinner.classList.add('d-none');
     }
 }
 
 async function initApp() {
-    const totalPokemonCount = await getAllPokemon();
-    totalPages = Math.ceil(totalPokemonCount / POKEMON_PER_PAGE);
+    const loadingSpinner = document.getElementById('loadingSpinner');
+
+    loadingSpinner.classList.remove('d-none');
+
+    await getAllPokemonData();
+    totalPages = Math.ceil(ALL_POKEMON_DATA.length / POKEMON_PER_PAGE);
+    currentPage = Math.max(1, Math.min(currentPage, totalPages));
 
     await getPokemonForPage(currentPage);
+
+    loadingSpinner.classList.add('d-none');
+
     filterInput.addEventListener('input', filterByPokemon);
     typeFilter.addEventListener('change', filterByPokemon);
 }

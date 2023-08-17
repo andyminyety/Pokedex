@@ -46,6 +46,15 @@
             </div>
         </div>
     </div>
+    <div class="text-center spinner-center" id="loadingSpinner">
+        <div class="spinner-border spinner-page" role="status"></div>
+        <div class="spinner-title">Loading...</div>
+    </div>
+    <div class="container mt-2">
+        <div class="row" id="listPokemon">
+            <!-- Pokemon elements will be added here -->
+        </div>
+    </div>
     <div class="modal fade modal-background" id="pokemonModal" tabindex="-1" aria-labelledby="pokemonModalLabel" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
         <div class="modal-dialog modal-dialog-centered modal-lg">
             <div class="modal-content">
@@ -58,17 +67,12 @@
             </div>
         </div>
     </div>    
-    <div class="container mt-2">
-        <div class="row" id="listPokemon">
-            <!-- Pokemon elements will be added here -->
-        </div>
-    </div>
     <div class="container" id="messageId">
         <!-- Pokemon alert will be added here -->
     </div>
     <div class="container mb-4">
-        <button class="btn-pages badge" id="previousPage" onclick="goToPreviousPage()">Previous</button>
-        <button class="btn-pages badge" id="nextPage" onclick="goToNextPage()">Next</button>
+        <button class="btn-pages badge d-none" id="previousPage" onclick="goToPreviousPage()">Previous</button>
+        <button class="btn-pages badge d-none" id="nextPage" onclick="goToNextPage()">Next</button>
     </div>  
     <script src="js/script.js"></script>
 </body>
