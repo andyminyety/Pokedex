@@ -1,10 +1,10 @@
-![image](https://github.com/andyminyety/Pokedex/blob/f9c7247549d1643866b0bb3d3901529a91e387ca/img/screenshot.png)
+![image](https://github.com/andyminyety/Pokedex/blob/adfb8acc050d298e162b4f13313b5e088d7f87e6/img/screenshot.png)
 
 # Pokédex
 
-A simple Pokemon app written primarily in Vanila JavaScript. It uses the API from: **[PokéAPI](https://pokeapi.co).**  
+A Pokemon app written in JavaScript. It uses the API from: **[PokéAPI](https://pokeapi.co).**  
 
-The app displays a list of the first 999 pokemon registered in the API. The user can search Pokemon by name and click on each Pokemon to open a modal that displays more information.
+The app displays a list of the pokemon registered in the API. The user can search Pokemon by name and click on each Pokemon to open a modal that displays more information.
 
 ### Demo :computer:
 
