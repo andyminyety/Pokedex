@@ -199,9 +199,14 @@ body {
     border: 0;
 }
 
+.modal-card {
+    cursor: pointer;
+}
+
 .modal-body {
     max-height: 70vh;
     overflow-y: auto;
+    border-radius: .7rem;
 }
 
 .modal-image {
@@ -215,18 +220,41 @@ body {
     font-weight: bold;
 }
 
-.modal-evolutions {
+.no-evolutions {
+    font-style: italic;
+    font-weight: bold;
+    color: #C03028;
+    margin: 0px 0px 10px;
+}
+
+.evolutions-image {
     display: block;
     margin: 0 auto;
-    max-width: 70%;
+    max-width: 60%;
+}
+
+.evolutions-id {
+    background-color: #DCDCDC;
+    color: #1C1C1C;
+    border: solid 1.6px;
+    font-size: 0.8rem;
+    margin: 0px 0px 10px;
 }
 
 .evolutions-name {
-    font-size: 24px;
+    font-size: 18px;
     font-weight: bold;
     margin: 0px 0px 10px;
 }
 
+.evolutions-types {
+    display: flex;
+    gap: .5rem;
+    font-size: 1rem;
+    font-weight: bold;
+    justify-content: center;
+    margin: 0;
+}
 
 .space-bottom {
     margin: 0px 0px 10px;

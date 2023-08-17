@@ -27,34 +27,38 @@ async function getPokemonById(pokemonId) {
 
 async function getEvolutions(pokemonSpeciesUrl) {
     try {
-      const speciesResponse = await fetch(pokemonSpeciesUrl);
-      const speciesData = await speciesResponse.json();
-      
-      const evolutionChainUrl = speciesData.evolution_chain.url;
-      const evolutionChainResponse = await fetch(evolutionChainUrl);
-      const evolutionChainData = await evolutionChainResponse.json();
-  
-      const evolutions = [];
-  
-      const processEvolutions = (evolutionDetails) => {
-        evolutions.push({
-          id: evolutionDetails.species.url.split('/').slice(-2, -1)[0],
-          name: evolutionDetails.species.name,
-          image: `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${evolutionDetails.species.url.split('/').slice(-2, -1)[0]}.png`
-        });
-        if (evolutionDetails.evolves_to.length > 0) {
-          evolutionDetails.evolves_to.forEach(evolution => {
-            processEvolutions(evolution);
-          });
-        }
-      };
-  
-      processEvolutions(evolutionChainData.chain);
-      return evolutions;
+        const speciesResponse = await fetch(pokemonSpeciesUrl);
+        const speciesData = await speciesResponse.json();
+
+        const evolutionChainUrl = speciesData.evolution_chain.url;
+        const evolutionChainResponse = await fetch(evolutionChainUrl);
+        const evolutionChainData = await evolutionChainResponse.json();
+
+        const evolutions = [];
+
+        const processEvolutions = async (evolutionDetails) => {
+            const id = evolutionDetails.species.url.split('/').slice(-2, -1)[0];
+            const pokemonResponse = await fetch(`${API_BASE_URL}pokemon/${id}`);
+            const pokemonData = await pokemonResponse.json();
+            const types = pokemonData.types.map(type => type.type.name);
+            evolutions.push({
+                id,
+                name: evolutionDetails.species.name,
+                types,
+                image: `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${id}.png`
+            });
+
+            for (const evolution of evolutionDetails.evolves_to) {
+                await processEvolutions(evolution);
+            }
+        };
+
+        await processEvolutions(evolutionChainData.chain);
+        return evolutions;
     } catch (error) {
-      throw new Error('Error fetching evolutions: ' + error.message);
+        throw new Error('Error fetching evolutions: ' + error.message);
     }
-} 
+}
 
 async function getPokemonForPage(page) {
     listPokemon.innerHTML = '';
@@ -100,29 +104,39 @@ function createPokemonCard(pokemon) {
 }
 
 async function openPokemonDetails(pokemon) {
-    const types = pokemon.types.map(type => `<span class="badge ${type.type.name}">${type.type.name}</span>`).join('');
-    const pokemonId = pokemon.id.toString().padStart(3, '0');
-    const totalStats = pokemon.stats.reduce((total, stat) => total + stat.base_stat, 0);
-
     try {
-        const evolutions = await getEvolutions(pokemon.species.url);
-        const evolutionsChunks = chunkArray(evolutions, 3);
+        const types = pokemon.types.map(type => `<span class="badge ${type.type.name}">${type.type.name}</span>`).join('');
+        const pokemonId = pokemon.id.toString().padStart(3, '0');
+        const totalStats = pokemon.stats.reduce((total, stat) => total + stat.base_stat, 0);
 
-        const evolutionSections = evolutionsChunks.map(chunk => chunk.map(evolution => `
-            <div class="col-md-4 mb-4">
-                <div class="d-flex flex-column align-items-center">
-                    <img class="modal-evolutions" src="${evolution.image}" alt="${evolution.name}">
-                    <div class="card-body">
-                        <p class="badge pokemon-id">#${evolution.id.toString().padStart(3, '0')}</p>
-                        <h3 class="evolutions-name">${evolution.name}</h3>
+        const evolutions = await getEvolutions(pokemon.species.url);
+
+        const evolutionCards = evolutions.map(evolution => {
+            const evolutionTypes = evolution.types.map(type => `<span class="badge ${type}">${type}</span>`).join('');
+            return `
+                <div class="col-md-4 mb-4">
+                    <div class="modal-card d-flex flex-column align-items-center" data-bs-toggle="modal" data-bs-target="#pokemonModal" onclick="openEvolutionDetails('${evolution.id}')">
+                        <img class="evolutions-image" src="${evolution.image}" alt="${evolution.name}">
+                        <div class="card-body">
+                            <p class="badge evolutions-id">#${evolution.id.toString().padStart(3, '0')}</p>
+                            <h3 class="evolutions-name">${evolution.name}</h3>
+                            <p class="evolutions-types">${evolutionTypes}</p>
+                        </div>
                     </div>
                 </div>
-            </div>
-        `).join(''));
+            `;
+        });
 
-        const evolutionHtml = evolutionSections.map(section => `
-            <div class="row">${section}</div>
-        `).join('');
+        const evolutionMessage = evolutions.length <= 1 ? '<p class="no-evolutions">This pokemon does not evolve</p>' : '';
+
+        const evolutionsBody = `
+            <div class="container">
+                <div class="row justify-content-center">
+                    ${evolutionMessage}
+                    ${evolutionCards.join('')}
+                </div>
+            </div>
+        `;
 
         modalBody.innerHTML = `
             <div class="row">
@@ -215,7 +229,7 @@ async function openPokemonDetails(pokemon) {
                 </div>
                 <div class="col-md-12">
                     <h6 class="modal-title mt-3 mb-2">Evolutions</h6>
-                        ${evolutionHtml}
+                        ${evolutionsBody}
                     </div>
                 </div>
             </div>
@@ -226,6 +240,13 @@ async function openPokemonDetails(pokemon) {
   } catch (error) {
     console.error(error.message);
   }
+}
+
+function openEvolutionDetails(evolutionId) {
+    const evolution = ALL_POKEMON_DATA.find(pokemon => pokemon.id.toString() === evolutionId);
+    if (evolution) {
+        openPokemonDetails(evolution);
+    }
 }
 
 function filterByPokemon() {
@@ -273,15 +294,6 @@ function chunkArray(array, chunkSize) {
     return chunks;
 }
 
-async function initApp() {
-    const totalPokemonCount = await getAllPokemon();
-    totalPages = Math.ceil(totalPokemonCount / POKEMON_PER_PAGE);
-
-    await getPokemonForPage(currentPage);
-    filterInput.addEventListener('input', filterByPokemon);
-    typeFilter.addEventListener('change', filterByPokemon);
-}
-
 function goToPage(page) {
     if (page >= 1 && page <= totalPages) {
         currentPage = page;
@@ -299,6 +311,15 @@ function goToNextPage() {
     if (currentPage < totalPages) {
         goToPage(currentPage + 1);
     }
+}
+
+async function initApp() {
+    const totalPokemonCount = await getAllPokemon();
+    totalPages = Math.ceil(totalPokemonCount / POKEMON_PER_PAGE);
+
+    await getPokemonForPage(currentPage);
+    filterInput.addEventListener('input', filterByPokemon);
+    typeFilter.addEventListener('change', filterByPokemon);
 }
 
 initApp();
