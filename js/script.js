@@ -1,10 +1,5 @@
 const API_BASE_URL = 'https://pokeapi.co/api/v2/';
-const POKEMON_PER_PAGE = 21;
 const ALL_POKEMON_DATA = [];
-
-let currentPage = 1;
-let totalPages = 0;
-let typeFilterActive = 'all';
 
 const listPokemon = document.getElementById('listPokemon');
 const filterInput = document.getElementById('filterInput');
@@ -13,6 +8,8 @@ const messageResult = document.getElementById('messageId');
 const previousPageButton = document.getElementById('previousPage');
 const nextPageButton = document.getElementById('nextPage');
 const modalBody = document.getElementById('modalBody');
+
+let typeFilterActive = 'all';
 
 async function getAllPokemon() {
     const response = await fetch(`${API_BASE_URL}pokemon`);
@@ -69,37 +66,12 @@ async function getEvolutions(pokemonSpeciesUrl) {
     }
 }
 
-async function getPokemonForPage(page) {
+async function getPokemonForPage() {
     listPokemon.innerHTML = '';
 
-    const startIndex = (page - 1) * POKEMON_PER_PAGE;
-    const endIndex = startIndex + POKEMON_PER_PAGE;
-
-    for (let i = startIndex; i < endIndex; i++) {
-        if (i < ALL_POKEMON_DATA.length) {
-            const pokemonData = ALL_POKEMON_DATA[i];
-            createPokemonCard(pokemonData);
-        } else {
-            const pokemonId = i + 1;
-            const pokemonData = await getPokemonById(pokemonId);
-            ALL_POKEMON_DATA.push(pokemonData);
-            createPokemonCard(pokemonData);
-        }
-    }
-
-    const previousPageButton = document.getElementById('previousPage');
-    const nextPageButton = document.getElementById('nextPage');
-
-    if (currentPage === 1) {
-        previousPageButton.classList.add('d-none');
-    } else {
-        previousPageButton.classList.remove('d-none');
-    }
-
-    if (currentPage === totalPages) {
-        nextPageButton.classList.add('d-none');
-    } else {
-        nextPageButton.classList.remove('d-none');
+    for (let i = 0; i < ALL_POKEMON_DATA.length; i++) {
+        const pokemonData = ALL_POKEMON_DATA[i];
+        createPokemonCard(pokemonData);
     }
 }
 
@@ -355,10 +327,8 @@ async function initApp() {
     loadingSpinner.classList.remove('d-none');
 
     await getAllPokemonData();
-    totalPages = Math.ceil(ALL_POKEMON_DATA.length / POKEMON_PER_PAGE);
-    currentPage = Math.max(1, Math.min(currentPage, totalPages));
 
-    await getPokemonForPage(currentPage);
+    await getPokemonForPage();
 
     loadingSpinner.classList.add('d-none');
 
