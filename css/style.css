@@ -25,6 +25,7 @@ body {
 .filter-badge {
     font-size: 0.9rem;
     display: inline-block;
+    margin: 5px 0px 5px;
 }
 
 .pokedex-image {
@@ -221,8 +222,9 @@ body {
 }
 
 .no-evolutions {
-    color: #C03028;
+    font-style: italic;
     font-weight: bold;
+    color: #C03028;
     margin: 0px 0px 10px;
 }
 
@@ -253,26 +255,6 @@ body {
     font-weight: bold;
     justify-content: center;
     margin: 0;
-}
-
-.spinner-center {
-   margin: 100px 0px 0px;
-}
-
-.spinner-page {
-    width: 3.5rem;
-    height: 3.5rem;
-    color: #F7F7F7;
-}
-
-.spinner-title {
-    color: #F7F7F7;
-    font-size: 30px;
-    font-weight: bold;
-}
-
-.space-bottom {
-    margin: 0px 0px 10px;
 }
 
 .stats-table {

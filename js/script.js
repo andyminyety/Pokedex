@@ -1,5 +1,10 @@
 const API_BASE_URL = 'https://pokeapi.co/api/v2/';
+const POKEMON_PER_PAGE = 21;
 const ALL_POKEMON_DATA = [];
+
+let currentPage = 1;
+let totalPages = 0;
+let typeFilterActive = 'all';
 
 const listPokemon = document.getElementById('listPokemon');
 const filterInput = document.getElementById('filterInput');
@@ -8,8 +13,6 @@ const messageResult = document.getElementById('messageId');
 const previousPageButton = document.getElementById('previousPage');
 const nextPageButton = document.getElementById('nextPage');
 const modalBody = document.getElementById('modalBody');
-
-let typeFilterActive = 'all';
 
 async function getAllPokemon() {
     const response = await fetch(`${API_BASE_URL}pokemon`);
@@ -20,15 +23,6 @@ async function getAllPokemon() {
 async function getPokemonById(pokemonId) {
     const response = await fetch(`${API_BASE_URL}pokemon/${pokemonId}`);
     return response.json();
-}
-
-async function getAllPokemonData() {
-    const totalPokemonCount = await getAllPokemon();
-
-    for (let i = 1; i <= Math.min(totalPokemonCount, 1010); i++) {
-        const pokemonData = await getPokemonById(i);
-        ALL_POKEMON_DATA.push(pokemonData);
-    }
 }
 
 async function getEvolutions(pokemonSpeciesUrl) {
@@ -66,14 +60,24 @@ async function getEvolutions(pokemonSpeciesUrl) {
     }
 }
 
-async function getPokemonForPage() {
+async function getPokemonForPage(page) {
     listPokemon.innerHTML = '';
 
-    for (let i = 0; i < ALL_POKEMON_DATA.length; i++) {
-        const pokemonData = ALL_POKEMON_DATA[i];
-        createPokemonCard(pokemonData);
+    const startIndex = (page - 1) * POKEMON_PER_PAGE;
+    const endIndex = startIndex + POKEMON_PER_PAGE;
+
+    for (let i = startIndex; i < endIndex; i++) {
+        if (i < ALL_POKEMON_DATA.length) {
+            const pokemonData = ALL_POKEMON_DATA[i];
+            createPokemonCard(pokemonData);
+        } else {
+            const pokemonId = i + 1;
+            const pokemonData = await getPokemonById(pokemonId);
+            ALL_POKEMON_DATA.push(pokemonData);
+            createPokemonCard(pokemonData);
+        }
     }
-}
+} 
 
 function createPokemonCard(pokemon) {
     const types = pokemon.types.map(type => `<span class="badge ${type.type.name}">${type.type.name}</span>`).join('');
@@ -299,39 +303,21 @@ function goToPage(page) {
 
 function goToPreviousPage() {
     if (currentPage > 1) {
-        const loadingSpinner = document.getElementById('loadingSpinner');
-        loadingSpinner.classList.remove('d-none');
-
-        currentPage--;
-        getPokemonForPage(currentPage);
-
-        loadingSpinner.classList.add('d-none');
+        goToPage(currentPage - 1);
     }
 }
 
 function goToNextPage() {
     if (currentPage < totalPages) {
-        const loadingSpinner = document.getElementById('loadingSpinner');
-        loadingSpinner.classList.remove('d-none');
-
-        currentPage++;
-        getPokemonForPage(currentPage);
-
-        loadingSpinner.classList.add('d-none');
+        goToPage(currentPage + 1);
     }
 }
 
 async function initApp() {
-    const loadingSpinner = document.getElementById('loadingSpinner');
+    const totalPokemonCount = await getAllPokemon();
+    totalPages = Math.ceil(totalPokemonCount / POKEMON_PER_PAGE);
 
-    loadingSpinner.classList.remove('d-none');
-
-    await getAllPokemonData();
-
-    await getPokemonForPage();
-
-    loadingSpinner.classList.add('d-none');
-
+    await getPokemonForPage(currentPage);
     filterInput.addEventListener('input', filterByPokemon);
     typeFilter.addEventListener('change', filterByPokemon);
 }
