@@ -1,4 +1,4 @@
-![image](https://github.com/andyminyety/Pokedex/blob/adfb8acc050d298e162b4f13313b5e088d7f87e6/img/screenshot.png)
+![image](https://github.com/andyminyety/Pokedex/blob/c7a5bd18494caf736c8bf3c2f675ed8a20f53244/img/screenshot.png)
 
 # Pokédex
 
