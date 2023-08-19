@@ -1,27 +1,29 @@
-const API_BASE_URL = 'https://pokeapi.co/api/v2/';
-const POKEMON_PER_PAGE = 21;
-const ALL_POKEMON_DATA = [];
+const apiUrl = 'https://pokeapi.co/api/v2/'
 
-let currentPage = 1;
-let totalPages = 0;
+const allPokemonData = [];
+
 let typeFilterActive = 'all';
 
 const listPokemon = document.getElementById('listPokemon');
-const filterInput = document.getElementById('filterInput');
+const inputFilter = document.getElementById('inputFilter');
 const typeFilter = document.getElementById('typeFilter');
 const messageResult = document.getElementById('messageId');
-const previousPageButton = document.getElementById('previousPage');
-const nextPageButton = document.getElementById('nextPage');
 const modalBody = document.getElementById('modalBody');
+const loadingSpinner = document.getElementById('loadingSpinner');
 
 async function getAllPokemon() {
-    const response = await fetch(`${API_BASE_URL}pokemon`);
-    const data = await response.json();
-    return data.count;
+    const pokemonPromises = [];
+
+    for (let i = 1; i <= 1010; i++) {
+        const url = `${apiUrl}pokemon/${i}`;
+        pokemonPromises.push(fetch(url).then(response => response.json()));
+    }
+
+    return Promise.all(pokemonPromises);
 }
 
 async function getPokemonById(pokemonId) {
-    const response = await fetch(`${API_BASE_URL}pokemon/${pokemonId}`);
+    const response = await fetch(`${apiUrl}pokemon/${pokemonId}`);
     return response.json();
 }
 
@@ -38,7 +40,7 @@ async function getEvolutions(pokemonSpeciesUrl) {
 
         const processEvolutions = async (evolutionDetails) => {
             const id = evolutionDetails.species.url.split('/').slice(-2, -1)[0];
-            const pokemonResponse = await fetch(`${API_BASE_URL}pokemon/${id}`);
+            const pokemonResponse = await fetch(`${apiUrl}pokemon/${id}`);
             const pokemonData = await pokemonResponse.json();
             const types = pokemonData.types.map(type => type.type.name);
             evolutions.push({
@@ -60,26 +62,8 @@ async function getEvolutions(pokemonSpeciesUrl) {
     }
 }
 
-async function getPokemonForPage(page) {
-    listPokemon.innerHTML = '';
-
-    const startIndex = (page - 1) * POKEMON_PER_PAGE;
-    const endIndex = startIndex + POKEMON_PER_PAGE;
-
-    for (let i = startIndex; i < endIndex; i++) {
-        if (i < ALL_POKEMON_DATA.length) {
-            const pokemonData = ALL_POKEMON_DATA[i];
-            createPokemonCard(pokemonData);
-        } else {
-            const pokemonId = i + 1;
-            const pokemonData = await getPokemonById(pokemonId);
-            ALL_POKEMON_DATA.push(pokemonData);
-            createPokemonCard(pokemonData);
-        }
-    }
-} 
-
 function createPokemonCard(pokemon) {
+    const pokemonImage = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${pokemon.id}.png`;
     const types = pokemon.types.map(type => `<span class="badge ${type.type.name}">${type.type.name}</span>`).join('');
     const pokemonId = pokemon.id.toString().padStart(3, '0');
 
@@ -87,7 +71,7 @@ function createPokemonCard(pokemon) {
     card.classList.add('col-md-4', 'mb-4');
     card.innerHTML = `
     <div class="card pokemon-card">
-        <img src="${pokemon.sprites.other['official-artwork'].front_default}" class="pokemon-image" alt="${pokemon.name}">
+        <img src="${pokemonImage}" class="pokemon-image" alt="${pokemon.name}" loading="lazy">
         <div class="card-body">
             <p class="badge pokemon-id">#${pokemonId}</p>
             <h3 class="pokemon-name">${pokemon.name}</h3>
@@ -105,8 +89,11 @@ function createPokemonCard(pokemon) {
 
 async function openPokemonDetails(pokemon) {
     try {
+        const pokemonImage = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${pokemon.id}.png`;
         const types = pokemon.types.map(type => `<span class="badge ${type.type.name}">${type.type.name}</span>`).join('');
         const pokemonId = pokemon.id.toString().padStart(3, '0');
+        const pokemonWeight = parseFloat(pokemon.weight / 10).toFixed(1);
+        const pokemonHeight = parseFloat(pokemon.height / 10).toFixed(1);
         const totalStats = pokemon.stats.reduce((total, stat) => total + stat.base_stat, 0);
 
         const evolutions = await getEvolutions(pokemon.species.url);
@@ -116,7 +103,7 @@ async function openPokemonDetails(pokemon) {
             return `
                 <div class="col-md-4 mb-4">
                     <div class="modal-card d-flex flex-column align-items-center" data-bs-toggle="modal" data-bs-target="#pokemonModal" onclick="openEvolutionDetails('${evolution.id}')">
-                        <img class="evolutions-image" src="${evolution.image}" alt="${evolution.name}">
+                        <img class="evolutions-image" src="${evolution.image}" alt="${evolution.name}" loading="lazy">
                         <div class="card-body">
                             <p class="badge evolutions-id">#${evolution.id.toString().padStart(3, '0')}</p>
                             <h3 class="evolutions-name">${evolution.name}</h3>
@@ -138,10 +125,12 @@ async function openPokemonDetails(pokemon) {
             </div>
         `;
 
+        const pokemonExperience = pokemon.base_experience !== null ? pokemon.base_experience : 'not';
+
         modalBody.innerHTML = `
             <div class="row">
                 <div class="col-md-5">
-                    <img src="${pokemon.sprites.other['official-artwork'].front_default}" alt="${pokemon.name}" class="modal-image">
+                    <img src="${pokemonImage}" alt="${pokemon.name}" class="modal-image" loading="lazy">
                     <div class="card-body">
                         <p class="badge pokemon-id">#${pokemonId}</p>
                         <h3 class="pokemon-name">${pokemon.name}</h3>
@@ -150,9 +139,9 @@ async function openPokemonDetails(pokemon) {
                     <table class="stats-table mt-3">
                         <thead>
                             <tr>
-                                <th class="stat-base"><i class="fa-regular fa-life-ring"></i></strong> ${pokemon.weight} Kg</th>
-                                <th class="stat-base"><i class="fa-regular fa-chart-bar"></i></strong> ${pokemon.height} M</th>
-                                <th class="stat-base"><i class="fas fa-chart-line"></i></strong> ${pokemon.base_experience} Exp</th>
+                                <th class="stat-base"><i class="fa-regular fa-life-ring"></i></strong> ${pokemonWeight} Kg</th>
+                                <th class="stat-base"><i class="fa-regular fa-chart-bar"></i></strong> ${pokemonHeight} M</th>
+                                <th class="stat-base"><i class="fas fa-chart-line"></i></strong> ${pokemonExperience} Exp</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -165,7 +154,7 @@ async function openPokemonDetails(pokemon) {
                     </table>
                 </div>
                 <div class="col-md-7">
-                    <h6 class="modal-title mt-3 mb-2">Base Stats</h6>
+                    <h6 class="modal-title mt-3 mb-2">Stats</h6>
                     <table class="stats-table">
                         <tbody>
                             <tr>
@@ -242,20 +231,22 @@ async function openPokemonDetails(pokemon) {
   }
 }
 
-function openEvolutionDetails(evolutionId) {
-    const evolution = ALL_POKEMON_DATA.find(pokemon => pokemon.id.toString() === evolutionId);
-    if (evolution) {
-        openPokemonDetails(evolution);
+async function openEvolutionDetails(evolutionId) {
+    try {
+        const evolutionData = await getPokemonById(evolutionId);
+        openPokemonDetails(evolutionData);
+    } catch (error) {
+        console.error(error.message);
     }
 }
 
 function filterByPokemon() {
-    const filterValue = filterInput.value.toLowerCase().trim();
+    const filterValue = inputFilter.value.toLowerCase().trim();
 
     listPokemon.innerHTML = '';
     let foundPokemon = false;
 
-    for (const pokemon of ALL_POKEMON_DATA) {
+    for (const pokemon of allPokemonData) {
         const pokemonName = pokemon.name.toLowerCase();
         const pokemonId = pokemon.id.toString();
 
@@ -268,12 +259,8 @@ function filterByPokemon() {
     if (!foundPokemon) {
         messageResult.innerHTML = '<img class="pokedex-image text-uppercase" src="img/pokemon-not-found.png" alt="Pokemon not found">';
         messageResult.style.display = 'block';
-        previousPageButton.style.display = 'none';
-        nextPageButton.style.display = 'none';
     } else {
         messageResult.style.display = 'none';
-        previousPageButton.style.display = 'inline-block';
-        nextPageButton.style.display = 'inline-block';
     }
 }
 
@@ -294,32 +281,22 @@ function chunkArray(array, chunkSize) {
     return chunks;
 }
 
-function goToPage(page) {
-    if (page >= 1 && page <= totalPages) {
-        currentPage = page;
-        getPokemonForPage(currentPage);
-    }
-}
-
-function goToPreviousPage() {
-    if (currentPage > 1) {
-        goToPage(currentPage - 1);
-    }
-}
-
-function goToNextPage() {
-    if (currentPage < totalPages) {
-        goToPage(currentPage + 1);
-    }
-}
-
 async function initApp() {
-    const totalPokemonCount = await getAllPokemon();
-    totalPages = Math.ceil(totalPokemonCount / POKEMON_PER_PAGE);
+    try {
+        loadingSpinner.style.display = 'block';
 
-    await getPokemonForPage(currentPage);
-    filterInput.addEventListener('input', filterByPokemon);
-    typeFilter.addEventListener('change', filterByPokemon);
+        const pokemonDataArray = await getAllPokemon();
+        allPokemonData.push(...pokemonDataArray);
+
+        loadingSpinner.style.display = 'none';
+
+        inputFilter.addEventListener('input', filterByPokemon);
+        typeFilter.addEventListener('change', filterByPokemon);
+
+        filterByPokemon();
+    } catch (error) {
+        console.error("Error al cargar los datos:", error);
+    }
 }
 
 initApp();

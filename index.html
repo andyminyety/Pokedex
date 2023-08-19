@@ -17,8 +17,8 @@
     <div class="container">
         <div class="row">
             <div class="col-md-12 mb-4">
-                <label class="input-group-text pokemon-form" for="filterInput">Filter by name or id:
-                    <input type="text" class="form-control text-uppercase ms-2" id="filterInput" oninput="filterByPokemon()">
+                <label class="input-group-text pokemon-form" for="inputFilter">Filter by name or id:
+                    <input type="text" class="form-control text-uppercase ms-2" id="inputFilter" oninput="filterByPokemon()">
                 </label>
             </div>
             <div class="col-md-12 mb-4">
@@ -66,10 +66,10 @@
     <div class="container" id="messageId">
         <!-- Pokemon alert will be added here -->
     </div>
-    <div class="container mb-4">
-        <button class="btn-pages badge" id="previousPage" onclick="goToPreviousPage()">Previous</button>
-        <button class="btn-pages badge" id="nextPage" onclick="goToNextPage()">Next</button>
-    </div>  
+    <div class="text-center" id="loadingSpinner">
+        <div class="spinner-border spinner-page" role="status"></div>
+        <div class="spinner-title">Loading...</div>
+    </div>    
     <script src="js/script.js"></script>
 </body>
 </html>
