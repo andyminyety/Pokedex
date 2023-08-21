@@ -58,7 +58,7 @@ async function getEvolutions(pokemonSpeciesUrl) {
         await processEvolutions(evolutionChainData.chain);
         return evolutions;
     } catch (error) {
-        throw new Error('Error fetching evolutions: ' + error.message);
+        console.error(error.message);
     }
 }
 
@@ -295,7 +295,7 @@ async function initApp() {
 
         filterByPokemon();
     } catch (error) {
-        console.error("Error al cargar los datos:", error);
+        console.error(error.message);
     }
 }
 
