@@ -133,9 +133,9 @@ async function openPokemonDetails(pokemon) {
                 <div class="col-md-5">
                     <img src="${pokemonImage}" alt="${pokemon.name}" class="modal-image" loading="lazy">
                     <div class="card-body">
-                        <p class="badge pokemon-id">#${pokemonId}</p>
-                        <h3 class="pokemon-name">${pokemon.name}</h3>
-                        <p class="pokemon-types">${types}</p>
+                        <p class="badge modal-pokemon-id">#${pokemonId}</p>
+                        <h3 class="modal-pokemon-name">${pokemon.name}</h3>
+                        <p class="modal-pokemon-types">${types}</p>
                     </div>
                     <table class="stats-table mt-3">
                         <thead>
@@ -161,7 +161,7 @@ async function openPokemonDetails(pokemon) {
                             <tr>
                                 <td class="td-bottom stat-name">HP</td>
                                 <td class="td-bottom stat-progress">
-                                    <div class="progress" style="height: 20px;">
+                                    <div class="progress">
                                         <div class="progress-bar progress-bar-striped progress-bar-animated grass progress-bar-label" role="progressbar" style="width: ${pokemon.stats.find(stat => stat.stat.name === 'hp').base_stat}%;" aria-valuenow="${pokemon.stats.find(stat => stat.stat.name === 'hp').base_stat}" aria-valuemin="0" aria-valuemax="100">${pokemon.stats.find(stat => stat.stat.name === 'hp').base_stat}</div>
                                     </div>
                                 </td>
@@ -169,7 +169,7 @@ async function openPokemonDetails(pokemon) {
                             <tr>
                                 <td class="td-bottom stat-name">Attack</td>
                                 <td class="td-bottom stat-progress">
-                                    <div class="progress" style="height: 20px;">
+                                    <div class="progress">
                                         <div class="progress-bar progress-bar-striped progress-bar-animated fighting progress-bar-label" role="progressbar" style="width: ${pokemon.stats.find(stat => stat.stat.name === 'attack').base_stat}%;" aria-valuenow="${pokemon.stats.find(stat => stat.stat.name === 'attack').base_stat}" aria-valuemin="0" aria-valuemax="100">${pokemon.stats.find(stat => stat.stat.name === 'attack').base_stat}</div>
                                     </div>
                                 </td>
@@ -177,7 +177,7 @@ async function openPokemonDetails(pokemon) {
                             <tr>
                                 <td class="td-bottom stat-name">Defense</td>
                                 <td class="td-bottom stat-progress">
-                                    <div class="progress" style="height: 20px;">
+                                    <div class="progress">
                                         <div class="progress-bar progress-bar-striped progress-bar-animated electric progress-bar-label" role="progressbar" style="width: ${pokemon.stats.find(stat => stat.stat.name === 'defense').base_stat}%;" aria-valuenow="${pokemon.stats.find(stat => stat.stat.name === 'defense').base_stat}" aria-valuemin="0" aria-valuemax="100">${pokemon.stats.find(stat => stat.stat.name === 'defense').base_stat}</div>
                                     </div>
                                 </td>
@@ -185,7 +185,7 @@ async function openPokemonDetails(pokemon) {
                             <tr>
                                 <td class="td-bottom stat-name">Sp. Attack</td>
                                 <td class="td-bottom stat-progress">
-                                    <div class="progress" style="height: 20px;">
+                                    <div class="progress">
                                         <div class="progress-bar progress-bar-striped progress-bar-animated water progress-bar-label" role="progressbar" style="width: ${pokemon.stats.find(stat => stat.stat.name === 'special-attack').base_stat}%;" aria-valuenow="${pokemon.stats.find(stat => stat.stat.name === 'special-attack').base_stat}" aria-valuemin="0" aria-valuemax="100">${pokemon.stats.find(stat => stat.stat.name === 'special-attack').base_stat}</div>
                                     </div>
                                 </td>
@@ -193,7 +193,7 @@ async function openPokemonDetails(pokemon) {
                             <tr>
                                 <td class="td-bottom stat-name">Sp. Defense</td>
                                 <td class="td-bottom stat-progress">
-                                    <div class="progress" style="height: 20px;">
+                                    <div class="progress">
                                         <div class="progress-bar progress-bar-striped progress-bar-animated fire progress-bar-label" role="progressbar" style="width: ${pokemon.stats.find(stat => stat.stat.name === 'special-defense').base_stat}%;" aria-valuenow="${pokemon.stats.find(stat => stat.stat.name === 'special-defense').base_stat}" aria-valuemin="0" aria-valuemax="100">${pokemon.stats.find(stat => stat.stat.name === 'special-defense').base_stat}</div>
                                     </div>
                                 </td>
@@ -201,7 +201,7 @@ async function openPokemonDetails(pokemon) {
                             <tr>
                                 <td class="td-bottom stat-name">Speed</td>
                                 <td class="td-bottom stat-progress">
-                                    <div class="progress" style="height: 20px;">
+                                    <div class="progress">
                                         <div class="progress-bar progress-bar-striped progress-bar-animated psychic progress-bar-label" role="progressbar" style="width: ${pokemon.stats.find(stat => stat.stat.name === 'speed').base_stat}%;" aria-valuenow="${pokemon.stats.find(stat => stat.stat.name === 'speed').base_stat}" aria-valuemin="0" aria-valuemax="100">${pokemon.stats.find(stat => stat.stat.name === 'speed').base_stat}</div>
                                     </div>
                                 </td>
@@ -209,7 +209,7 @@ async function openPokemonDetails(pokemon) {
                             <tr>
                                 <td class="td-bottom stat-name">Total</td>
                                 <td class="td-bottom stat-progress">
-                                    <div class="progress" style="height: 20px;">
+                                    <div class="progress">
                                         <div class="progress-bar progress-bar-striped progress-bar-animated ghost progress-bar-label" role="progressbar" style="width: ${totalStats}%;" aria-valuenow="${totalStats}" aria-valuemin="0" aria-valuemax="100">${totalStats}</div>
                                     </div>
                                 </td>
