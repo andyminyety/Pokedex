@@ -22,7 +22,7 @@
                 </label>
             </div>
             <div class="col-md-12 mb-4">
-                <label class="input-group-text pokemon-form d-flex flex-wrap" for="typeFilter" id="typeFilter">Filter by type:
+                <label class="input-group-text pokemon-form d-flex flex-wrap" id="typeFilter">Filter by type:
                     <span type="button" class="filter-badge badge all ms-2" data-type="all" onclick="filterByType('all')">All</span>
                     <span type="button" class="filter-badge badge bug ms-2" data-type="bug" onclick="filterByType('bug')">Bug</span>
                     <span type="button" class="filter-badge badge dark ms-2" data-type="dark" onclick="filterByType('dark')">Dark</span>
@@ -66,6 +66,9 @@
     <div class="container" id="messageId">
         <!-- Pokemon alert will be added here -->
     </div>
+    <button type="button" class="scroll-top btn btn-primary btn-floating btn-lg" id="scrollToTopBtn">
+        <i class="fas fa-arrow-up"></i>
+    </button>
     <div class="text-center" id="loadingSpinner">
         <div class="spinner-border spinner-page" role="status"></div>
         <div class="spinner-title">Loading...</div>

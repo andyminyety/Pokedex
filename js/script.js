@@ -10,6 +10,7 @@ const typeFilter = document.getElementById('typeFilter');
 const messageResult = document.getElementById('messageId');
 const modalBody = document.getElementById('modalBody');
 const loadingSpinner = document.getElementById('loadingSpinner');
+const scrollToTopBtn = document.getElementById('scrollToTopBtn');
 
 async function getAllPokemon() {
     const pokemonPromises = [];
@@ -281,6 +282,23 @@ function chunkArray(array, chunkSize) {
     return chunks;
 }
 
+function scrollToTopButton() {
+    const scrollToTopBtn = document.getElementById('scrollToTopBtn');
+
+    function toggleScrollButton() {
+        const shouldDisplay = window.scrollY > 300;
+        scrollToTopBtn.style.display = shouldDisplay ? 'block' : 'none';
+    }
+
+    function scrollToTop() {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    scrollToTopBtn.addEventListener('click', scrollToTop);
+    window.addEventListener('scroll', toggleScrollButton);
+    toggleScrollButton();
+}
+
 async function initApp() {
     try {
         loadingSpinner.style.display = 'block';
@@ -294,6 +312,7 @@ async function initApp() {
         typeFilter.addEventListener('change', filterByPokemon);
 
         filterByPokemon();
+        scrollToTopButton();
     } catch (error) {
         console.error(error.message);
     }

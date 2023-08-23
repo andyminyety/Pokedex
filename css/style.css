@@ -22,6 +22,16 @@ body {
     font-weight: bold;
 }
 
+.scroll-top {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    width: 60px;
+    height: 60px;
+    font-size: 30px;
+    border-radius: 50%;
+}
+
 .pokedex-container {
     max-width: 100%;
     text-align: center;
@@ -300,9 +310,21 @@ body {
     color: #F7F7F7;
 }
 
-@media (min-width: 768px) and (max-width: 1024px) {
+@media (min-width: 768px) and (max-width:993px) {
     .modal-lg {
-        max-width: 90%;
+        max-width: 70%;
+    }
+
+    .col-md-5 {
+        flex: 0 0 auto;
+        width: 100%;
+        padding: 0 25px;
+    }
+
+    .col-md-7 {
+        flex: 0 0 auto;
+        width: 100%;
+        padding: 0 25px;
     }
 }
 
