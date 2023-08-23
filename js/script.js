@@ -10,7 +10,7 @@ const typeFilter = document.getElementById('typeFilter');
 const messageResult = document.getElementById('messageId');
 const modalBody = document.getElementById('modalBody');
 const loadingSpinner = document.getElementById('loadingSpinner');
-const scrollToTopBtn = document.getElementById('scrollToTopBtn');
+const scrollToTopBtn = document.getElementById('scrollToTop');
 
 async function getAllPokemon() {
     const pokemonPromises = [];
@@ -283,10 +283,9 @@ function chunkArray(array, chunkSize) {
 }
 
 function scrollToTopButton() {
-    const scrollToTopBtn = document.getElementById('scrollToTopBtn');
 
     function toggleScrollButton() {
-        const shouldDisplay = window.scrollY > 300;
+        const shouldDisplay = window.scrollY > 1000;
         scrollToTopBtn.style.display = shouldDisplay ? 'block' : 'none';
     }
 
@@ -312,10 +311,10 @@ async function initApp() {
         typeFilter.addEventListener('change', filterByPokemon);
 
         filterByPokemon();
-        scrollToTopButton();
     } catch (error) {
         console.error(error.message);
     }
 }
 
 initApp();
+scrollToTopButton();
