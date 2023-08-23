@@ -131,7 +131,7 @@ async function openPokemonDetails(pokemon) {
         modalBody.innerHTML = `
             <div class="row">
                 <div class="col-md-5">
-                    <img src="${pokemonImage}" alt="${pokemon.name}" class="modal-image" loading="lazy">
+                    <img src="${pokemonImage}" alt="${pokemon.name}" class="modal-pokemon-image" loading="lazy">
                     <div class="card-body">
                         <p class="badge modal-pokemon-id">#${pokemonId}</p>
                         <h3 class="modal-pokemon-name">${pokemon.name}</h3>

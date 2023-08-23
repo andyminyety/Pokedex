@@ -233,6 +233,12 @@ body {
     border-radius: .7rem;
 }
 
+.modal-pokemon-image {
+    display: block;
+    margin: 0 auto;
+    max-width: 70%;
+}
+
 .modal-pokemon-id {
     background-color: #DCDCDC;
     color: #1C1C1C;
@@ -253,12 +259,6 @@ body {
     font-weight: bold;
     justify-content: center;
     margin: 0;
-}
-
-.modal-image {
-    display: block;
-    margin: 0 auto;
-    max-width: 70%;
 }
 
 .modal-title {
@@ -355,6 +355,10 @@ body {
 
     .pokemon-image {
         max-width: 70%;
+    }
+
+    .modal-pokemon-image {
+        max-width: 60%;
     }
 
     .modal-pokemon-id {
