@@ -9,7 +9,7 @@ const inputFilter = document.getElementById('inputFilter');
 const typeFilter = document.getElementById('typeFilter');
 const messageResult = document.getElementById('messageId');
 const modalBody = document.getElementById('modalBody');
-const loadingSpinner = document.getElementById('loadingSpinner');
+const loaderPage = document.getElementById('loaderPage');
 const scrollToTopBtn = document.getElementById('scrollToTop');
 
 async function getAllPokemon() {
@@ -300,12 +300,12 @@ function scrollToTopButton() {
 
 async function initApp() {
     try {
-        loadingSpinner.style.display = 'block';
+        loaderPage.style.display = 'block';
 
         const pokemonDataArray = await getAllPokemon();
         allPokemonData.push(...pokemonDataArray);
 
-        loadingSpinner.style.display = 'none';
+        loaderPage.style.display = 'none';
 
         inputFilter.addEventListener('input', filterByPokemon);
         typeFilter.addEventListener('change', filterByPokemon);

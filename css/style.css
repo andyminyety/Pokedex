@@ -9,29 +9,6 @@ body {
     font-family: monaco, Consolas, Lucida Console, monospace;
 }
 
-.spinner-page {
-    width: 3rem; 
-    height: 3rem;
-    color: #F7F7F7;
-    margin: 50px 0px 0px;
-}
-
-.spinner-title {
-    font-size: 30px;
-    color: #F7F7F7;
-    font-weight: bold;
-}
-
-.scroll-top {
-    position: fixed;
-    bottom: 20px;
-    right: 20px;
-    width: 60px;
-    height: 60px;
-    font-size: 30px;
-    border-radius: 50%;
-}
-
 .pokedex-container {
     max-width: 100%;
     text-align: center;
@@ -334,6 +311,44 @@ body {
     font-weight: bold;
     font-size: 1rem;
     color: #F7F7F7;
+}
+
+.loader {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    display: inline-block;
+    position: relative;
+    border: 10px solid;
+    margin-top: 50px;
+    border-color: rgba(255, 255, 255, 0.2) rgba(255, 255, 255, 0.4) rgba(255, 255, 255, 0.6) rgb(255, 255, 255);
+    box-sizing: border-box;
+    animation: rotation 1s linear infinite;
+}
+  
+@keyframes rotation {
+    0% {
+      transform: rotate(0deg);
+    }
+    100% {
+      transform: rotate(360deg);
+    }
+}
+
+.loader-title {
+    font-size: 30px;
+    color: #F7F7F7;
+    font-weight: bold;
+}
+
+.scroll-top {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    width: 60px;
+    height: 60px;
+    font-size: 30px;
+    border-radius: 50%;
 }
 
 @media (min-width: 768px) and (max-width:993px) {
